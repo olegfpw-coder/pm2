@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "abouts",
+  "info": {
+    "singularName": "about",
+    "pluralName": "abouts",
+    "displayName": "About"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "TextP1": {
+      "type": "richtext",
+      "required": true
+    },
+    "textP2": {
+      "type": "richtext"
+    }
+  }
+}
