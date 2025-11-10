@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSliderData, BASE_URL } from '../api/starpi'; // Импортируем BASE_URL
-import '../Slider.css'; // Подключаем ваш CSS файл
+import { fetchSliderData } from '../api/starpi';
+// Стили импортируются в main.css // Подключаем ваш CSS файл
 
 const Slider = () => {
     const [slides, setSlides] = useState([]); // Состояние для хранения слайдов
     const [currentSlide, setCurrentSlide] = useState(0); // Текущий активный слайд
     const [sliderHeight, setSliderHeight] = useState(0); // Высота слайдера
+    const [isPaused, setIsPaused] = useState(false); // Пауза автопрокрутки
 
     // Загрузка данных при монтировании компонента
     useEffect(() => {
         const loadSliderData = async () => {
             try {
                 const sliderData = await fetchSliderData();
-                console.log('Ответ от API:', sliderData); // Временный вывод для проверки
-                // Преобразуем данные в удобный формат
-                const formattedSlides = sliderData.map((slide) => ({
-                    id: slide.id,
-                    title: slide.tetle || 'No Title', // Исправляем опечатку tetle
-                    imageUrl: `${BASE_URL}${slide.image?.[0]?.url}` || null, // Добавляем базовый URL
-                    order: slide.order || 0, // Защита от undefined
-                }));
-                // Фильтруем слайды, у которых есть валидный URL изображения
-                const validSlides = formattedSlides.filter((slide) => slide.imageUrl);
+                // console.log('Ответ от API (slider):', sliderData);
+                // Используем уже подготовленное поле imageUrl из API-утилиты
+                const validSlides = (Array.isArray(sliderData) ? sliderData : [])
+                    .filter((slide) => !!slide.imageUrl);
                 // Сортируем слайды по полю order
                 validSlides.sort((a, b) => a.order - b.order);
                 setSlides(validSlides);
@@ -63,17 +58,40 @@ const Slider = () => {
 
     // Автоматическое переключение слайдов каждые 5 секунд
     useEffect(() => {
+        if (!slides.length || isPaused) return;
         const interval = setInterval(nextSlide, 5000);
         return () => clearInterval(interval); // Очистка интервала при размонтировании компонента
-    }, [slides]);
+    }, [slides, isPaused]);
 
     // Если слайды еще не загружены, показываем заглушку
     if (!slides.length) {
         return <div className="slider">Загрузка слайдов...</div>;
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            prevSlide();
+        }
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            nextSlide();
+        }
+    };
+
     return (
-        <div className="slider" style={{ height: `${sliderHeight}px` }}>
+        <div
+            className="slider"
+            style={{ height: `${sliderHeight}px` }}
+            role="region"
+            aria-label="Слайдер афиши"
+            tabIndex={0}
+            onKeyDown={onKeyDown}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocus={() => setIsPaused(true)}
+            onBlur={() => setIsPaused(false)}
+        >
             {/* Обертка для слайдов */}
             <div
                 className="slider-wrapper"
@@ -82,17 +100,17 @@ const Slider = () => {
                 {slides.map((slide) => (
                     <div key={slide.id} className="slide">
                         {/* Проверяем наличие imageUrl перед отображением изображения */}
-                        {slide.imageUrl && <img src={slide.imageUrl} alt={slide.title} />}
+                        {slide.imageUrl && <img src={slide.imageUrl} alt={slide.title} loading="lazy" />}
                         {/* Если нужно отображать заголовок */}
                     </div>
                 ))}
             </div>
 
             {/* Кнопки переключения */}
-            <button className="slider-arrow prev" onClick={prevSlide}>
+            <button className="slider-arrow prev" onClick={prevSlide} aria-label="Предыдущий слайд">
                 &#10094; {/* Стрелка влево */}
             </button>
-            <button className="slider-arrow next" onClick={nextSlide}>
+            <button className="slider-arrow next" onClick={nextSlide} aria-label="Следующий слайд">
                 &#10095; {/* Стрелка вправо */}
             </button>
 

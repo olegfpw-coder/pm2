@@ -1,5 +1,4 @@
 import React from 'react';
-import './styles.css';
 import scene1 from "../img/Peoples/Мурзина.jpg";
 
 const TeamPage = () => {

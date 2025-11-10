@@ -1,10 +1,9 @@
 // src/pages/About.jsx
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Collage from '../components/TheatreCollage'; // Убедись, что путь правильный
 import { fetchAboutData } from '../api/starpi'; // Импортируем функцию
-import '../styles.css'; // Убедись, что путь к стилям правильный
+import MarkdownRenderer from '../components/MarkdownRenderer';
+// Стили импортируются в main.css // Убедись, что путь к стилям правильный
 
 const About = () => {
     const [textP1, setTextP1] = useState(''); // Для первого текста (строка)
@@ -38,8 +37,6 @@ const About = () => {
 
     return (
         <div className="about-page">
-            <Header />
-
             <main className="about-container">
                 {/* Отображение состояния загрузки */}
                 {loading && <p className="loading-text">Загрузка информации о театре...</p>}
@@ -50,14 +47,22 @@ const About = () => {
                 {/* Отображение контента, если нет ошибок и загрузка завершена */}
                 {!loading && !error && (
                     <>
-                        {/* Отображаем текст как обычный абзац */}
-                        {/* Используем dangerouslySetInnerHTML только если вы уверены, что текст безопасен (например, чистый Markdown без HTML) */}
-                        {/* В большинстве случаев лучше отображать как обычный текст */}
-                        {textP1 && <p className="about_p">{textP1}</p>}
+                        {/* Отображаем RichText с Markdown-форматированием */}
+                        {textP1 && (
+                            <MarkdownRenderer 
+                                content={textP1} 
+                                className="about_p"
+                            />
+                        )}
 
                         <Collage /> {/* Компонент коллажа */}
 
-                        {textP2 && <p className="about_p">{textP2}</p>}
+                        {textP2 && (
+                            <MarkdownRenderer 
+                                content={textP2} 
+                                className="about_p"
+                            />
+                        )}
                     </>
                 )}
 
@@ -68,8 +73,6 @@ const About = () => {
                     </p>
                 )}
             </main>
-
-            <Footer />
         </div>
     );
 };

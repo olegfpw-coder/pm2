@@ -1,0 +1,175 @@
+/* ========================================
+   СТРАНИЦА РЕЦЕНЗИЙ
+   ======================================== */
+
+.reviews-page {
+    padding: var(--spacing-xl);
+    min-height: 100vh;
+}
+
+.reviews-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.reviews-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: var(--spacing-md);
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.reviews-header h1 {
+    margin: var(--spacing-md) 0;
+    color: var(--text);
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.review-card {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-avatar .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.author-name {
+    font-weight: 500;
+}
+
+.review-date {
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+}
+
+.review-title {
+    margin: var(--spacing-md) 0;
+    color: var(--text);
+}
+
+.review-text {
+    margin: var(--spacing-lg) 0;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.review-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border);
+}
+
+.like-button {
+    background: none;
+    border: 1px solid var(--border);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.like-button:hover:not(:disabled) {
+    background: #fee;
+    border-color: #fcc;
+}
+
+.like-button.liked {
+    background: #fee;
+    border-color: #fcc;
+    color: #c33;
+}
+
+.like-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+.no-reviews p {
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-light);
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+    .reviews-page {
+        padding: var(--spacing-md);
+    }
+
+    .review-card {
+        padding: var(--spacing-lg);
+    }
+
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-sm);
+    }
+}
+

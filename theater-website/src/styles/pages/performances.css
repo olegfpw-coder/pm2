@@ -1,0 +1,432 @@
+/* ========================================
+   СТРАНИЦА СПЕКТАКЛЕЙ
+   ======================================== */
+
+.performances-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0;
+    width: 100%;
+}
+
+.performances-container {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.performances-container h1 {
+    text-align: center;
+    margin: var(--spacing-xl) 0;
+    font-size: var(--font-size-5xl);
+    color: var(--text);
+}
+
+/* Карточки спектаклей */
+.performance-container {
+    display: flex;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    align-items: center;
+    background: #f9f9f9;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.performance-container:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.performance-image {
+    flex: 0 0 250px;
+}
+
+.performance-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.performance-info {
+    flex: 1;
+}
+
+.performance-title {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--text);
+}
+
+.performance-description {
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+    color: var(--text-light);
+    margin-bottom: var(--spacing-lg);
+}
+
+.performance-creators-preview {
+    margin-bottom: var(--spacing-lg);
+}
+
+.creators-preview-title {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Страница отдельного спектакля */
+.single-performance-page {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.single-performance-container {
+    flex: 1;
+    text-align: center;
+    padding: var(--spacing-xl);
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.single-performance-container h2 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text);
+}
+
+.single-performance-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    margin-top: var(--spacing-lg);
+    box-shadow: var(--shadow);
+}
+
+.single-performance-container p {
+    font-size: var(--font-size-md);
+    color: var(--text-light);
+    margin-top: var(--spacing-lg);
+    line-height: 1.6;
+    text-align: left;
+}
+
+/* Блоки создателей и исполнителей */
+.performance-creators-cast {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.performance-creators,
+.performance-cast {
+    background: #f9f9f9;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.performance-creators h3,
+.performance-cast h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--text);
+    text-align: left;
+    border-bottom: 2px solid var(--primary);
+    padding-bottom: var(--spacing-sm);
+}
+
+.creators-content,
+.cast-content {
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+    color: var(--text-light);
+    text-align: left;
+}
+
+.creators-content p,
+.cast-content p {
+    margin-bottom: var(--spacing-sm);
+}
+
+.creators-content ul,
+.cast-content ul {
+    margin-left: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.creators-content li,
+.cast-content li {
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Блок с сеансами и продажей билетов */
+.performance-sessions {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.performance-sessions h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text);
+    text-align: left;
+}
+
+.sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.session-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.session-item:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.session-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.session-date-time {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text);
+}
+
+.session-date {
+    color: var(--primary);
+}
+
+.session-time {
+    color: var(--text);
+}
+
+.session-hall,
+.session-price {
+    font-size: var(--font-size-md);
+    color: var(--text-light);
+}
+
+.session-pushkincard {
+    font-size: var(--font-size-sm);
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.session-ticket-link {
+    text-decoration: none;
+    margin-left: var(--spacing-md);
+}
+
+.sessions-loading {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+    color: var(--text-light);
+}
+
+/* Блок с действиями пользователя */
+.performance-actions {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.favorite-button {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.favorite-button:hover {
+    background: #f0f7ff;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.favorite-button.active {
+    background: var(--primary);
+    color: white;
+}
+
+.favorite-button.active:hover {
+    background: var(--primary-dark);
+}
+
+/* Галерея спектакля */
+.performance-gallery {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+}
+
+.performance-gallery h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+    color: var(--text);
+}
+
+.gallery-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.gallery-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.gallery-image:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow);
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+    .performances-container {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .performances-container h1 {
+        font-size: var(--font-size-3xl);
+        margin: var(--spacing-lg) 0;
+    }
+
+    .performance-container {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .performance-image {
+        flex: 0 0 100%;
+        max-height: 200px;
+    }
+
+    .performance-image img {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    .performance-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .performance-description {
+        font-size: var(--font-size-sm);
+    }
+
+    .single-performance-container {
+        padding: var(--spacing-md);
+    }
+
+    .single-performance-container h2 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .performance-creators-cast {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .performance-creators,
+    .performance-cast {
+        padding: var(--spacing-md);
+    }
+
+    .performance-creators h3,
+    .performance-cast h3 {
+        font-size: var(--font-size-lg);
+    }
+
+    .creators-content,
+    .cast-content {
+        font-size: var(--font-size-sm);
+    }
+
+    .session-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .session-ticket-link {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .session-ticket-link .btn {
+        width: 100%;
+    }
+
+    .session-date-time {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+
+    .gallery-image {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+
+
+
+
+
+
+
+

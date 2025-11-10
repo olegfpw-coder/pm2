@@ -1,13 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './styles.css';
+import Button from './Button';
+import MarkdownRenderer from './MarkdownRenderer';
+// Стили импортируются в main.css
 
 const NewsItem = ({ id, image, title, date, description }) => {
     return (
         <div className="news-item">
             <div className="news-image">
                 {image ? (
-                    <img src={image} alt={`Новость: ${title}`} />
+                    <img
+                        src={image}
+                        alt={`Новость: ${title}`}
+                        loading="lazy"
+                        onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = '/logo512.png';
+                        }}
+                    />
                 ) : (
                     <div className="no-image">Изображение недоступно</div>
                 )}
@@ -18,14 +28,20 @@ const NewsItem = ({ id, image, title, date, description }) => {
                     <span className="news-date">{date}</span>
                     <h2 className="news-title">{title}</h2>
                 </div>
-                <p className="news-description">
-                    {description.length > 120
+                <MarkdownRenderer 
+                    content={description.length > 120
                         ? `${description.substring(0, 120)}...`
-                        : description}
-                </p>
-                <Link to={`/news/${id}`} className="news-button">
-                    ЧИТАТЬ ДАЛЕЕ
+                        : description
+                    }
+                    className="news-description"
+                />
+                <Link to={`/news/${id}`}>
+                    <Button variant="primary" size="md">
+                        ЧИТАТЬ ДАЛЕЕ
+                    </Button>
                 </Link>
+
+                {/* Мини-галерея изображений убрана */}
             </div>
         </div>
     );

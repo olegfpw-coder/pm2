@@ -41,6 +41,18 @@
     },
     "dates": {
       "type": "json"
+    },
+    "creators": {
+      "type": "richtext"
+    },
+    "cast": {
+      "type": "richtext"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "favorites"
     }
   }
 }

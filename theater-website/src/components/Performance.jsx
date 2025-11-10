@@ -1,7 +1,9 @@
 import React from 'react';
-import './styles.css';
+import Button from './Button';
+import MarkdownRenderer from './MarkdownRenderer';
+// Стили импортируются в main.css
 
-const Performance = ({ id, image, title, description }) => {
+const Performance = ({ id, image, title, creators }) => {
     return (
         <div className="performance-container">
             {/* Левая часть - обложка спектакля */}
@@ -12,14 +14,21 @@ const Performance = ({ id, image, title, description }) => {
             {/* Правая часть - информация о спектакле */}
             <div className="performance-info">
                 <h2 className="performance-title">{title.toUpperCase()}</h2>
-                <p className="performance-description">
-                    {description.length > 150 
-                        ? `${description.substring(0, 150)}...` 
-                        : description
-                    }
-                </p>
-                <a href={`/performances/${id}`} className="performance-button">
-                    ПОДРОБНЕЕ
+                {creators ? (
+                    <div className="performance-creators-preview">
+                        <h3 className="creators-preview-title">Создатели спектакля:</h3>
+                        <MarkdownRenderer 
+                            content={creators}
+                            className="performance-description"
+                        />
+                    </div>
+                ) : (
+                    <p className="performance-description">Информация о создателях недоступна</p>
+                )}
+                <a href={`/performances/${id}`}>
+                    <Button variant="primary" size="md">
+                        ПОДРОБНЕЕ
+                    </Button>
                 </a>
             </div>
         </div>

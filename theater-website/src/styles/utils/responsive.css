@@ -1,0 +1,124 @@
+/* ========================================
+   АДАПТИВНЫЕ СТИЛИ
+   ======================================== */
+
+/* Общие мобильные стили */
+@media (max-width: 767px) {
+    body {
+        margin-left: var(--spacing-sm);
+        margin-right: var(--spacing-sm);
+    }
+
+    h1, h2, h3 {
+        font-size: 80%; /* Уменьшаем заголовки */
+    }
+
+    button, .buy-ticket-btn, .news-btn, .btn {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        min-height: 36px;
+    }
+
+    /* Улучшенные отступы для мобильных */
+    .container {
+        padding-left: var(--spacing-sm);
+        padding-right: var(--spacing-sm);
+    }
+}
+
+/* Планшеты */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        max-width: 750px;
+        margin: 0 auto;
+    }
+}
+
+/* Десктопы */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+/* Большие экраны */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+/* Скрытие элементов на разных экранах */
+.hidden-mobile {
+    display: block;
+}
+
+.hidden-desktop {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .hidden-mobile {
+        display: none;
+    }
+
+    .hidden-desktop {
+        display: block;
+    }
+}
+
+/* Адаптивные изображения */
+.responsive-img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Адаптивные контейнеры */
+.responsive-container {
+    width: 100%;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 576px) {
+    .responsive-container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .responsive-container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .responsive-container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .responsive-container {
+        max-width: 1140px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .responsive-container {
+        max-width: 1320px;
+    }
+}
+
+
+
+
+
+
+
+
+

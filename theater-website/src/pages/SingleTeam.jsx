@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchTeamsData } from '../api/starpi'; // Импортируем функцию для получения данных
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import '../styles.css';
-
+import MarkdownRenderer from '../components/MarkdownRenderer';
+// Стили импортируются в main.css
 const SingleTeam = () => {
     const { id } = useParams(); // Получаем ID артиста из URL
     const [team, setTeam] = useState(null); // Состояние для хранения артиста
@@ -34,25 +32,25 @@ const SingleTeam = () => {
 
     return (
         <div className="single-artist-page">
-            <Header />
             
             <main className="single-artist-container">
                 {loading && <p>Загрузка данных команды...</p>}
 
                 {error && <p style={{ color: 'red' }}>{error}</p>}
 
-                {team && (
+                {team && (      
                     <div>
                         <h2>{team.name}</h2>
                         <p><strong>Звание:</strong> {team.title}</p>
                         <img src={team.photo} alt={`Фото ${team.name}`} />
-                        <p>{team.bio}</p>
-                        )}
+                        <MarkdownRenderer 
+                            content={team.bio} 
+                            className="team-bio"
+                        />
                     </div>
                 )}
             </main>
             
-            <Footer />
         </div>
     );
 };

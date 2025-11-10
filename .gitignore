@@ -1,0 +1,17 @@
+node_modules/
+web/dist/
+web/build/
+web/.vite/
+strapi/.cache/
+strapi/.tmp/
+strapi/build/
+.env
+.env.*
+strapi/.env
+web/.env
+strapi/public/uploads/**
+!strapi/public/uploads/.gitkeep
+*.log
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,215 @@
+/* ========================================
+   СТРАНИЦЫ АРТИСТОВ И КОМАНДЫ
+   ======================================== */
+
+/* Сетка артистов */
+.artist-grid {
+    text-decoration: none;
+    display: grid;
+    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: var(--spacing-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.art {
+    text-align: center;
+    border: 1px solid var(--border);
+    padding: var(--spacing-md);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text);
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+.art:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--text);
+}
+
+.art img {
+    width: 100%;
+    height: 400px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    margin-bottom: var(--spacing-md);
+}
+
+.art h3 {
+    font-size: var(--font-size-xl);
+    margin: var(--spacing-sm) 0;
+    color: var(--text);
+}
+
+.art p {
+    color: var(--text-light);
+    font-size: var(--font-size-sm);
+}
+
+/* Страница отдельного артиста */
+.single-artist-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.single-artist-page .single-artist-container {
+    flex: 1;
+    max-width: 1200px !important;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+    /* Обновлено: приведено к стандарту news-container */
+}
+
+/* Стили для внутреннего div без класса */
+.single-artist-page .single-artist-container > div {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.single-artist-container h2 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-lg);
+    color: var(--text);
+    text-align: center;
+}
+
+.single-artist-container p {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.single-artist-container img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: 400px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    box-shadow: var(--shadow);
+}
+
+/* Галерея артиста */
+.artist-gallery {
+    margin-top: var(--spacing-xl);
+    width: fit-content;
+}
+
+/* Специфичные стили для миниатюр в галерее артиста */
+.artist-gallery .mini-gallery-images {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+    justify-content: flex-start;
+    width: fit-content;
+}
+
+.artist-gallery .mini-gallery-image {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 1;
+    flex-shrink: 0;
+}
+
+.artist-gallery .mini-gallery-image:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Заголовок галереи */
+.artist-gallery h3 {
+    width: fit-content;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-images {
+    display: grid;
+    justify-items: center;
+    gap: var(--spacing-sm);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: var(--spacing-sm);
+}
+
+.gallery-image {
+    width: 400px;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    margin: 0;
+    padding: 0;
+}
+
+.gallery-image:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow);
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+    .artist-grid {
+        grid-template-columns: 1fr;
+        padding: var(--spacing-sm);
+        gap: var(--spacing-md);
+    }
+
+    .art {
+        padding: var(--spacing-sm);
+    }
+
+    .art img {
+        height: 300px;
+    }
+
+    .single-artist-page .single-artist-container {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .single-artist-container h2 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .single-artist-container img {
+        height: 300px;
+    }
+    
+    /* Адаптивные стили для галереи артиста */
+    .artist-gallery .mini-gallery-image {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .gallery-images {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xs);
+    }
+    
+    /* Адаптивные стили для очень маленьких экранов */
+    .artist-gallery .mini-gallery-image {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    .gallery-image {
+        width: 100%;
+        max-width: 300px;
+    }
+}

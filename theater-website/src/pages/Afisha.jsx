@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import '../styles.css';
+
+// Стили импортируются в main.css
 import { fetchRepertoireMonths } from '../api/starpi'; // Импортируем функцию для получения данных
 
 const Afisha = () => {
@@ -27,7 +26,7 @@ const Afisha = () => {
 
     return (
         <div className="repertoire-page">
-            <Header />
+
 
             <div className="hero-banner">
                 <div className="hero-content">
@@ -66,7 +65,6 @@ const Afisha = () => {
                 )}
             </div>
 
-            <Footer />
         </div>
     );
 };

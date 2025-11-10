@@ -1,0 +1,75 @@
+/* ========================================
+   CSS СБРОС И БАЗОВЫЕ СТИЛИ
+   ======================================== */
+
+/* Сброс стилей */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Базовые стили для body */
+body {
+    font-family: "Inter", sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--card-bg);
+    margin: 0;
+    padding: 0 10px; /* Отступы по бокам, особенно для мобильных */
+}
+
+/* Улучшенная типографика */
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+}
+
+p {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Ссылки */
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    color: var(--accent-dark);
+}
+
+/* Изображения */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Списки */
+ul, ol {
+    list-style: none;
+}
+
+/* Кнопки */
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* Фокус для доступности */
+*:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* Убираем outline для мыши, оставляем для клавиатуры */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+

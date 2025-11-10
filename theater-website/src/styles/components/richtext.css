@@ -1,0 +1,506 @@
+/* ========================================
+   RICHTEXT СТИЛИ
+   ======================================== */
+
+/* Общие стили для RichText контента */
+.artist-bio,
+.team-bio,
+.about_p,
+.news-description,
+.performance-description {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Стили для заголовков в RichText */
+.artist-bio h1,
+.artist-bio h2,
+.artist-bio h3,
+.artist-bio h4,
+.artist-bio h5,
+.artist-bio h6,
+.team-bio h1,
+.team-bio h2,
+.team-bio h3,
+.team-bio h4,
+.team-bio h5,
+.team-bio h6,
+.about_p h1,
+.about_p h2,
+.about_p h3,
+.about_p h4,
+.about_p h5,
+.about_p h6,
+.news-description h1,
+.news-description h2,
+.news-description h3,
+.news-description h4,
+.news-description h5,
+.news-description h6,
+.performance-description h1,
+.performance-description h2,
+.performance-description h3,
+.performance-description h4,
+.performance-description h5,
+.performance-description h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: inherit;
+}
+
+.artist-bio h1,
+.team-bio h1,
+.about_p h1,
+.news-description h1,
+.performance-description h1 {
+    font-size: 1.5rem;
+}
+
+.artist-bio h2,
+.team-bio h2,
+.about_p h2,
+.news-description h2,
+.performance-description h2 {
+    font-size: 1.3rem;
+}
+
+.artist-bio h3,
+.team-bio h3,
+.about_p h3,
+.news-description h3,
+.performance-description h3 {
+    font-size: 1.1rem;
+}
+
+/* Стили для параграфов в RichText */
+.artist-bio p,
+.team-bio p,
+.about_p p,
+.news-description p,
+.performance-description p {
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+/* Стили для списков в RichText */
+.artist-bio ul,
+.artist-bio ol,
+.team-bio ul,
+.team-bio ol,
+.about_p ul,
+.about_p ol,
+.news-description ul,
+.news-description ol,
+.performance-description ul,
+.performance-description ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.artist-bio li,
+.team-bio li,
+.about_p li,
+.news-description li,
+.performance-description li {
+    margin-bottom: 0.5rem;
+    list-style-type: disc;
+}
+
+.artist-bio ol li,
+.team-bio ol li,
+.about_p ol li,
+.news-description ol li,
+.performance-description ol li {
+    list-style-type: decimal;
+}
+
+/* Стили для жирного текста */
+.artist-bio strong,
+.artist-bio b,
+.team-bio strong,
+.team-bio b,
+.about_p strong,
+.about_p b,
+.news-description strong,
+.news-description b,
+.performance-description strong,
+.performance-description b {
+    font-weight: bold;
+}
+
+/* Стили для курсива */
+.artist-bio em,
+.artist-bio i,
+.team-bio em,
+.team-bio i,
+.about_p em,
+.about_p i,
+.news-description em,
+.news-description i,
+.performance-description em,
+.performance-description i {
+    font-style: italic;
+}
+
+/* Стили для подчеркнутого текста */
+.artist-bio u,
+.team-bio u,
+.about_p u,
+.news-description u,
+.performance-description u {
+    text-decoration: underline;
+}
+
+/* Стили для зачеркнутого текста */
+.artist-bio s,
+.artist-bio strike,
+.team-bio s,
+.team-bio strike,
+.about_p s,
+.about_p strike,
+.news-description s,
+.news-description strike,
+.performance-description s,
+.performance-description strike {
+    text-decoration: line-through;
+}
+
+/* Стили для ссылок */
+.artist-bio a,
+.team-bio a,
+.about_p a,
+.news-description a,
+.performance-description a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.artist-bio a:hover,
+.team-bio a:hover,
+.about_p a:hover,
+.news-description a:hover,
+.performance-description a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+/* Стили для цитат */
+.artist-bio blockquote,
+.team-bio blockquote,
+.about_p blockquote,
+.news-description blockquote,
+.performance-description blockquote {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-left: 4px solid #ddd;
+    background-color: #f9f9f9;
+    font-style: italic;
+}
+
+/* Стили для кода */
+.artist-bio code,
+.team-bio code,
+.about_p code,
+.news-description code,
+.performance-description code {
+    background-color: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.artist-bio pre,
+.team-bio pre,
+.about_p pre,
+.news-description pre,
+.performance-description pre {
+    background-color: #f4f4f4;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.artist-bio pre code,
+.team-bio pre code,
+.about_p pre code,
+.news-description pre code,
+.performance-description pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Стили для изображений в RichText */
+.artist-bio img,
+.team-bio img,
+.about_p img,
+.news-description img,
+.performance-description img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border-radius: 5px;
+}
+
+/* Стили для галерей изображений - теперь используем мини-галерею везде */
+.gallery-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.gallery-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 1;
+}
+
+.gallery-image:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Стили для изображений в коллаже */
+.shows-grid .show img {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shows-grid .show img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Все галереи используют единые стили, определенные ниже */
+
+/* Мини-галерея в списке новостей */
+.news-mini-gallery {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.news-mini-gallery h4 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* ========================================
+   ЕДИНЫЕ СТИЛИ ДЛЯ ВСЕХ ГАЛЕРЕЙ
+   ======================================== */
+
+/* Контейнер для миниатюр галереи */
+.mini-gallery-images {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+/* Миниатюры изображений */
+.mini-gallery-image {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 1;
+    flex-shrink: 0;
+}
+
+.mini-gallery-image:hover {
+    transform: scale(1.1);
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+}
+
+/* Заголовки галерей */
+.news-gallery h3,
+.artist-gallery h3,
+.performance-gallery h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Отступы для галерей */
+.news-gallery,
+.artist-gallery,
+.performance-gallery {
+    margin-top: 2rem;
+}
+
+/* Адаптивные стили для галерей */
+@media (max-width: 768px) {
+    .mini-gallery-images {
+        gap: 0.4rem;
+        margin: 0.8rem 0;
+    }
+    
+    .mini-gallery-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .news-gallery h3,
+    .artist-gallery h3,
+    .performance-gallery h3 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mini-gallery-images {
+        gap: 0.3rem;
+        margin: 0.6rem 0;
+    }
+    
+    .mini-gallery-image {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .news-gallery h3,
+    .artist-gallery h3,
+    .performance-gallery h3 {
+        font-size: 1rem;
+    }
+}
+
+.mini-gallery-more {
+    width: 60px;
+    height: 60px;
+    background: #f8f9fa;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mini-gallery-more:hover {
+    background: #e9ecef;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+/* ========================================
+   УТИЛИТЫ ДЛЯ СТАТИЧЕСКИХ СТРАНИЦ
+   ======================================== */
+.page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Стили для таблиц */
+.artist-bio table,
+.team-bio table,
+.about_p table,
+.news-description table,
+.performance-description table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.artist-bio th,
+.artist-bio td,
+.team-bio th,
+.team-bio td,
+.about_p th,
+.about_p td,
+.news-description th,
+.news-description td,
+.performance-description th,
+.performance-description td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.artist-bio th,
+.team-bio th,
+.about_p th,
+.news-description th,
+.performance-description th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Стили для разделителей */
+.artist-bio hr,
+.team-bio hr,
+.about_p hr,
+.news-description hr,
+.performance-description hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 2rem 0;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .artist-bio,
+    .team-bio,
+    .about_p,
+    .news-description,
+    .performance-description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .artist-bio h1,
+    .team-bio h1,
+    .about_p h1,
+    .news-description h1,
+    .performance-description h1 {
+        font-size: 1.3rem;
+    }
+    
+    .artist-bio h2,
+    .team-bio h2,
+    .about_p h2,
+    .news-description h2,
+    .performance-description h2 {
+        font-size: 1.2rem;
+    }
+    
+    .artist-bio h3,
+    .team-bio h3,
+    .about_p h3,
+    .news-description h3,
+    .performance-description h3 {
+        font-size: 1.1rem;
+    }
+}

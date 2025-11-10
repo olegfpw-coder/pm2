@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "docs",
+  "info": {
+    "singularName": "doc",
+    "pluralName": "docs",
+    "displayName": "doc"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "document": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "doc_name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

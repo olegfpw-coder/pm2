@@ -4,7 +4,8 @@
   "info": {
     "singularName": "newss",
     "pluralName": "newsp",
-    "displayName": "News"
+    "displayName": "News",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -17,6 +18,20 @@
       "type": "date"
     },
     "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "text": {
+      "type": "richtext"
+    },
+    "gallery": {
       "allowedTypes": [
         "images",
         "files",
@@ -24,10 +39,7 @@
         "audios"
       ],
       "type": "media",
-      "multiple": false
-    },
-    "text": {
-      "type": "richtext"
+      "multiple": true
     }
   }
 }

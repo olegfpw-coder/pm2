@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { fetchNewsData, BASE_URL } from '../api/starpi'; // Импортируем функцию для получения данных новостей
+import { fetchNewsData, BASE_URL } from '../api/starpi'; // Импортируем функцию и BASE_URL
 import { Link } from 'react-router-dom'; // Импортируем компонент Link
-import './styles.css';
+import Button from './Button'; // Импортируем новый компонент Button
+// Стили импортируются в main.css
 
 const News = () => {
     const [news, setNews] = useState([]); // Состояние для хранения новостей
     const [hoveredImage, setHoveredImage] = useState(null); // Состояние для текущего изображения при наведении
+
+    const resolveUrl = (img) => {
+        if (!img) return null;
+        if (typeof img === 'string') return img.startsWith('http') ? img : `${BASE_URL}${img}`;
+        if (img.url) return img.url.startsWith('http') ? img.url : `${BASE_URL}${img.url}`;
+        const attrUrl = img.data?.attributes?.url;
+        if (attrUrl) return attrUrl.startsWith('http') ? attrUrl : `${BASE_URL}${attrUrl}`;
+        const fmts = img.data?.attributes?.formats;
+        if (fmts) {
+            const order = ['large', 'medium', 'small', 'thumbnail'];
+            for (const key of order) {
+                const u = fmts[key]?.url;
+                if (u) return u.startsWith('http') ? u : `${BASE_URL}${u}`;
+            }
+        }
+        return null;
+    };
 
     // Загрузка данных при монтировании компонента
     useEffect(() => {
         const loadNewsData = async () => {
             try {
                 const newsData = await fetchNewsData();
-                console.log('Данные новостей:', newsData); // Временный вывод для проверки
+                // console.log('Данные новостей:', newsData);
 
                 if (Array.isArray(newsData)) {
                     // Сортируем новости по дате (от новой к старой)
@@ -38,7 +56,7 @@ const News = () => {
                             to={`/news/${item.id}`}
                             key={item.id}
                             className="news-item"
-                            onMouseEnter={() => item.image?.url && setHoveredImage(item.image.url)}
+                            onMouseEnter={() => setHoveredImage(resolveUrl(item.image))}
                             onMouseLeave={() => setHoveredImage(null)}
                         >
                             <div>
@@ -55,16 +73,18 @@ const News = () => {
                 ) : (
                     <p>Загрузка новостей...</p>
                 )}
-                <Link to="/news" className="news-btn">
-                    Читать все новости
+                <Link to="/news">
+                    <Button variant="primary" size="md">
+                        Читать все новости
+                    </Button>
                 </Link>
             </div>
             <div className="news-image">
                 {/* Если есть изображение, отобразим его */}
                 {hoveredImage ? (
-                    <img src={`${BASE_URL}${hoveredImage}`} alt="Новость при наведении" />
-                ) : Array.isArray(news) && news.length && news[0]?.image?.url ? (
-                    <img src={`${BASE_URL}${news[0].image.url}`} alt="Новость по умолчанию" />
+                    <img src={hoveredImage} alt="Новость при наведении" />
+                ) : Array.isArray(news) && news.length && news[0]?.image ? (
+                    <img src={resolveUrl(news[0].image)} alt="Новость по умолчанию" />
                 ) : (
                     <p>Изображение недоступно</p>
                 )}

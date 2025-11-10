@@ -1,0 +1,17 @@
+{
+  "kind": "singleType",
+  "collectionName": "tourings",
+  "info": {
+    "singularName": "touring",
+    "pluralName": "tourings",
+    "displayName": "Touring"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Touring": {
+      "type": "richtext"
+    }
+  }
+}

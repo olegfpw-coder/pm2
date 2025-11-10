@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { fetchTeamsData } from '../api/starpi'; // Импортируем функцию для получения данных
-import '../styles.css';
+// Стили импортируются в main.css
 
 const Teams = () => {
     const [teams, setTeams] = useState([]); // Состояние для хранения артистов
@@ -28,8 +26,6 @@ const Teams = () => {
 
     return (
         <div className="artists-page">
-            <Header />
-
             <main className="artists-container">
                 <h2>Команда театра</h2>
 
@@ -51,8 +47,6 @@ const Teams = () => {
                     !loading && <p>Нет доступных членов команды.</p>
                 )}
             </main>
-
-            <Footer />
         </div>
     );
 };

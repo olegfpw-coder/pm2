@@ -1,0 +1,152 @@
+/* ========================================
+   СТИЛИ ДОСТУПНОСТИ
+   ======================================== */
+
+/* Основной класс для режима доступности */
+.accessibility-mode {
+    font-size: 100% !important;
+    line-height: 1.6 !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* Применяем кернинг */
+.accessibility-mode * {
+    letter-spacing: normal !important;
+    background-image: none !important;
+}
+
+/* Управление изображениями */
+.accessibility-mode img {
+    display: block !important;
+    border: none !important;
+}
+
+/* Стили для ссылок */
+.accessibility-mode a {
+    color: inherit !important;
+    text-decoration: inherit !important;
+}
+
+/* Стили фокуса */
+.accessibility-mode *:focus {
+    outline: 3px solid #000 !important;
+    outline-offset: 2px;
+}
+
+/* Специальные случаи */
+.accessibility-mode .text-on-white-bg {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+/* Высокий контраст */
+.accessibility-mode.high-contrast {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.accessibility-mode.high-contrast a {
+    color: #0000EE !important;
+    text-decoration: underline !important;
+}
+
+.accessibility-mode.high-contrast img {
+    border: 2px solid #000 !important;
+}
+
+/* Увеличенный шрифт */
+.accessibility-mode.large-text {
+    font-size: 120% !important;
+}
+
+.accessibility-mode.extra-large-text {
+    font-size: 150% !important;
+}
+
+/* Широкий кернинг */
+.accessibility-mode.wide-spacing * {
+    letter-spacing: 0.1em !important;
+}
+
+/* Узкий кернинг */
+.accessibility-mode.tight-spacing * {
+    letter-spacing: -0.05em !important;
+}
+
+/* Скрытие изображений */
+.accessibility-mode.hide-images img {
+    display: none !important;
+}
+
+/* Улучшенные фокусы для клавиатуры */
+*:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+}
+
+/* Скрытие фокуса для мыши */
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Улучшенная видимость ссылок */
+a:not(.btn):not(.btn--primary):not(.btn--secondary) {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+a:not(.btn):not(.btn--primary):not(.btn--secondary):hover {
+    text-decoration-thickness: 2px;
+}
+
+/* Улучшенная видимость кнопок */
+button:not(:disabled):hover,
+.btn:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+/* Улучшенная видимость интерактивных элементов */
+[role="button"]:hover,
+[tabindex]:hover {
+    background-color: var(--border-light);
+    border-radius: var(--radius-sm);
+}
+
+/* Скрытие декоративных элементов для скринридеров */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Улучшенная видимость для людей с нарушениями зрения */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Улучшенная видимость для людей с высоким контрастом */
+@media (prefers-contrast: high) {
+    :root {
+        --primary: #000;
+        --accent: #000;
+        --text: #000;
+        --border: #000;
+    }
+}

@@ -1,0 +1,135 @@
+/* ========================================
+   СТРАНИЦА "О ТЕАТРЕ"
+   ======================================== */
+
+.about-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.about-container {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.about-container h1 {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    color: var(--text);
+}
+
+.about_p {
+    text-align: justify;
+    font-size: var(--font-size-lg);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-xl);
+    color: var(--text);
+    max-width: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Коллаж театра */
+.theatre-collage {
+    margin: var(--spacing-2xl) 0;
+    text-align: center;
+}
+
+.collage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.collage-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.collage-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.collage-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.collage-item:hover img {
+    transform: scale(1.05);
+}
+
+.collage-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    padding: var(--spacing-md);
+    transform: translateY(100%);
+    transition: var(--transition);
+}
+
+.collage-item:hover .collage-overlay {
+    transform: translateY(0);
+}
+
+/* Состояния загрузки и ошибок */
+.loading-text,
+.error-text,
+.no-content-text {
+    text-align: center;
+    padding: var(--spacing-xl);
+    font-size: var(--font-size-lg);
+}
+
+.error-text {
+    color: var(--danger);
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    margin: var(--spacing-md) 0;
+}
+
+.no-content-text {
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+    .about-container {
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .about-container h1 {
+        font-size: var(--font-size-3xl);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .about_p {
+        font-size: var(--font-size-md);
+        line-height: 1.6;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .collage-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .collage-item img {
+        height: 150px;
+    }
+}

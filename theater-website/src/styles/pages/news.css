@@ -1,0 +1,222 @@
+/* ========================================
+   СТРАНИЦА НОВОСТЕЙ
+   ======================================== */
+
+.news-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.news-container {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.news-container h1 {
+    text-align: center;
+    margin: var(--spacing-xl) 0 var(--spacing-2xl);
+    font-size: var(--font-size-5xl);
+    color: var(--text);
+}
+
+.news-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+}
+
+.news-item {
+    display: flex;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    text-decoration: none;
+    color: inherit;
+}
+
+.news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.news-image {
+    flex: 0 0 450px; /* Для десктопов */
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    display: flex;
+    justify-content: center;
+}
+
+.news-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    margin-top: var(--spacing-lg);
+    transition: var(--transition);
+}
+
+/* Специфичные стили для изображения в SingleNews */
+.single-news-page .news-image {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.single-news-page .news-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-top: 0;
+}
+
+.news-item:hover .news-image img {
+    transform: scale(1.05);
+}
+
+.news-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.news-header {
+    margin-bottom: var(--spacing-md);
+}
+
+.news-date {
+    display: block;
+    color: var(--muted);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.news-title {
+    font-size: var(--font-size-2xl);
+    margin: 0;
+    color: var(--text);
+    line-height: 1.3;
+}
+
+.news-description {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+    flex-grow: 1;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    background-color: var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: var(--font-size-sm);
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination button.active {
+    background-color: var(--primary);
+    color: white;
+}
+
+.pagination button:hover:not(.active) {
+    background-color: var(--border-light);
+}
+
+.pagination button.active:hover {
+    background-color: var(--primary-dark);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Мобильная версия */
+@media (max-width: 767px) {
+    .news-container {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .news-container h1 {
+        font-size: var(--font-size-3xl);
+        margin: var(--spacing-lg) 0;
+    }
+
+    .news-item {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+    }
+
+    .news-image {
+        flex: 0 0 100%;
+        height: auto;
+    }
+
+    .news-image img {
+        width: 100%;
+        height: auto;
+        margin-top: 0;
+    }
+    
+    /* Адаптивные стили для SingleNews */
+    .single-news-page .news-image {
+        max-width: 100%;
+    }
+    
+    .single-news-page .news-image img {
+        height: 300px;
+    }
+
+    .news-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .news-description {
+        font-size: var(--font-size-sm);
+    }
+
+    .pagination {
+        gap: var(--spacing-xs);
+    }
+
+    .pagination button {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+        min-width: 32px;
+        height: 32px;
+    }
+}
+
+
+
+
+
+
+
