@@ -4,7 +4,8 @@
   "info": {
     "singularName": "review",
     "pluralName": "reviews",
-    "displayName": "Review"
+    "displayName": "Review",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -21,7 +22,7 @@
     "rating": {
       "type": "integer"
     },
-    "users_permissions_user": {
+    "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
@@ -32,6 +33,12 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "inversedBy": "users"
+    },
+    "performance": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::performance.performance",
+      "inversedBy": "reviews"
     }
   }
 }

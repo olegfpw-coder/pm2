@@ -549,6 +549,7 @@ export interface ApiPerformancePerformance extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
+    reviews: Schema.Attribute.Relation<'oneToMany', 'api::review.review'>;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -593,6 +594,7 @@ export interface ApiRepertoireMonthRepertoireMonth
 export interface ApiReviewReview extends Struct.CollectionTypeSchema {
   collectionName: 'reviews';
   info: {
+    description: '';
     displayName: 'Review';
     pluralName: 'reviews';
     singularName: 'review';
@@ -614,6 +616,10 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
       'api::review.review'
     > &
       Schema.Attribute.Private;
+    performance: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::performance.performance'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Integer;
     text: Schema.Attribute.RichText & Schema.Attribute.Required;
@@ -621,7 +627,7 @@ export interface ApiReviewReview extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    users_permissions_user: Schema.Attribute.Relation<
+    user: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
     >;

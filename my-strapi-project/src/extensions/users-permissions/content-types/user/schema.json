@@ -91,17 +91,17 @@
       "target": "api::performance.performance",
       "inversedBy": "users"
     },
-    "reviews": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::review.review",
-      "mappedBy": "users_permissions_user"
-    },
     "users": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::review.review",
       "mappedBy": "likes"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "user"
     }
   }
 }

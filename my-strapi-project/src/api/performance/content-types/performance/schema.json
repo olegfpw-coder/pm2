@@ -53,6 +53,12 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "favorites"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "performance"
     }
   }
 }
