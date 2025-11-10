@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // Стили импортируются в main.css
 import { fetchRepertoireMonths } from '../api/starpi'; // Импортируем функцию для получения данных
+import AfishaByMonth from '../components/AfishaByMonth';
 
 const Afisha = () => {
     const [months, setMonths] = useState([]);
@@ -41,6 +42,9 @@ const Afisha = () => {
                     </a>
                 </div>
             </div>
+
+            {/* Афиша по месяцам из QuickTickets */}
+            <AfishaByMonth />
 
             <div className="repertoire-months">
                 {months.length > 0 ? (

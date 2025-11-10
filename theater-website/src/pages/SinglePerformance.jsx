@@ -10,9 +10,10 @@ import Button from '../components/Button';
 import CreateReviewModal from '../components/CreateReviewModal';
 // Стили импортируются в main.css
 
-// ID или алиас организации в QuickTickets (можно вынести в .env)
-// Если не указан, будет использоваться поиск по всем организациям
-const QUICKTICKETS_ORGANISATION_ID = process.env.REACT_APP_QUICKTICKETS_ORG_ID || null;
+    // ID или алиас организации в QuickTickets (можно вынести в .env)
+    // Если не указан, будет использоваться поиск по всем организациям
+    const QUICKTICKETS_ORGANISATION_ID = process.env.REACT_APP_QUICKTICKETS_ORG_ID || null;
+    const QT_PROXY = process.env.REACT_APP_QT_PROXY_URL || null;
 
 const SinglePerformance = () => {
     const { id } = useParams(); // Получаем ID спектакля из URL
@@ -45,11 +46,12 @@ const SinglePerformance = () => {
                     }
                     
                     // Загружаем сеансы из QuickTickets API
-                    // Проверяем наличие токенов (обязательны для работы API)
-                    const hasApiTokens = process.env.REACT_APP_QUICKTICKETS_API_TOKEN && 
-                                        process.env.REACT_APP_QUICKTICKETS_API_SALT;
+                    // Разрешаем два режима: через прокси (QT_PROXY) или прямой (по токенам)
+                    const hasApiTokens = Boolean(process.env.REACT_APP_QUICKTICKETS_API_TOKEN) && 
+                                         Boolean(process.env.REACT_APP_QUICKTICKETS_API_SALT);
+                    const canUseQuickTickets = Boolean(QT_PROXY) || hasApiTokens;
                     
-                    if (hasApiTokens && selectedPerformance.title) {
+                    if (canUseQuickTickets && selectedPerformance.title) {
                         setLoadingSessions(true);
                         try {
                             console.log('Загрузка сеансов для спектакля:', selectedPerformance.title);
@@ -74,10 +76,8 @@ const SinglePerformance = () => {
                         } finally {
                             setLoadingSessions(false);
                         }
-                    } else if (!hasApiTokens) {
-                        console.warn('Токены QuickTickets API не настроены. Добавьте в .env:');
-                        console.warn('REACT_APP_QUICKTICKETS_API_TOKEN');
-                        console.warn('REACT_APP_QUICKTICKETS_API_SALT');
+                    } else if (!canUseQuickTickets) {
+                        console.warn('QuickTickets: ни прокси (REACT_APP_QT_PROXY_URL), ни токены не настроены.');
                     }
                 } else {
                     setError('Спектакль не найден.');
@@ -265,8 +265,9 @@ const SinglePerformance = () => {
                                 fontSize: '12px'
                             }}>
                                 <strong>Отладка:</strong><br/>
-                                API Token: {process.env.REACT_APP_QUICKTICKETS_API_TOKEN ? '✓ Настроен' : '✗ Не настроен'}<br/>
-                                API Salt: {process.env.REACT_APP_QUICKTICKETS_API_SALT ? '✓ Настроен' : '✗ Не настроен'}<br/>
+                                Proxy: {QT_PROXY ? '✓ Используется' : '—'}<br/>
+                                API Token: {process.env.REACT_APP_QUICKTICKETS_API_TOKEN ? '✓ Настроен' : '—'}<br/>
+                                API Salt: {process.env.REACT_APP_QUICKTICKETS_API_SALT ? '✓ Настроен' : '—'}<br/>
                                 Organisation ID: {QUICKTICKETS_ORGANISATION_ID || 'не указан (поиск по всем)'}<br/>
                                 Найдено сеансов: {sessions.length}
                             </div>
