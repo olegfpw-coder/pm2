@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QuickTickets API Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; line-height:1.45; }
+    input, select, button, textarea { margin: 6px 0; display:block; padding:8px; }
+    fieldset { border:1px solid #ddd; padding:14px; margin-bottom:16px; }
+    legend { font-weight: bold; }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .row > div { flex:1 1 240px; }
+    pre { background:#f6f6f6; padding:12px; max-height:420px; overflow:auto; }
+    .muted { color:#666; font-size: 13px; }
+    .ok { color: #0a7a0a; }
+    .err { color: #a00; }
+  </style>
+</head>
+<body>
+  <h2>Тест API партнёра (через proxy)</h2>
+
+  <fieldset>
+    <legend>Универсальный вызов</legend>
+    <label>Эндпоинт (например: <code>event/list</code>, <code>organisation/list</code>, <code>area/list</code>)</label>
+    <input id="path" value="event/list" />
+
+    <label>Параметры (JSON)</label>
+    <textarea id="params" rows="4">{ "organisationId": 123 }</textarea>
+
+    <label>Метод</label>
+    <select id="method">
+      <option>GET</option>
+      <option>POST</option>
+    </select>
+
+    <button id="send">Отправить</button>
+    <div id="status"></div>
+    <h4>Ответ (raw):</h4>
+    <pre id="out">—</pre>
+  </fieldset>
+
+  <fieldset>
+    <legend>Быстрая кнопка: получить афишу театра</legend>
+    <div class="row">
+      <div>
+        <label>organisationId (число)</label>
+        <input id="orgId" placeholder="например, 123" />
+      </div>
+      <div>
+        <label>organisationAlias (строка)</label>
+        <input id="orgAlias" placeholder="например, berezin-theatre" />
+      </div>
+      <div>
+        <label>Дата c (YYYY-MM-DD)</label>
+        <input id="dateFrom" placeholder="например, 2025-11-01" />
+      </div>
+      <div>
+        <label>Дата по (YYYY-MM-DD)</label>
+        <input id="dateTo" placeholder="например, 2025-11-30" />
+      </div>
+    </div>
+    <button id="btnAfisha">Получить афишу театра</button>
+    <div class="muted">Заполните <b>organisationId</b> или <b>organisationAlias</b>. Даты опциональны.</div>
+
+    <h4>Итог (короткое резюме):</h4>
+    <pre id="afishaSummary">—</pre>
+
+    <h4>Ответ (raw):</h4>
+    <pre id="afishaRaw">—</pre>
+  </fieldset>
+
+  <script>
+    async function callProxy(body) {
+      const r = await fetch('/api/proxy', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
+      const text = await r.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch(e) {}
+      return { status: r.status, text, json };
+    }
+
+    // Универсальная форма
+    document.getElementById('send').onclick = async () => {
+      const path = document.getElementById('path').value.trim();
+      const method = document.getElementById('method').value;
+      let params;
+      try { params = JSON.parse(document.getElementById('params').value || '{}'); }
+      catch(e) { alert('Неправильный JSON в параметрах'); return; }
+
+      const res = await callProxy({ path, params, method });
+      document.getElementById('status').innerHTML = res.status < 400
+        ? `<span class="ok">HTTP ${res.status}</span>` : `<span class="err">HTTP ${res.status}</span>`;
+      document.getElementById('out').textContent = res.json ? JSON.stringify(res.json, null, 2) : res.text;
+    };
+
+    // Быстрая кнопка "Афиша театра"
+    document.getElementById('btnAfisha').onclick = async () => {
+      const organisationId = document.getElementById('orgId').value.trim();
+      const organisationAlias = document.getElementById('orgAlias').value.trim();
+      const dateFrom = document.getElementById('dateFrom').value.trim();
+      const dateTo = document.getElementById('dateTo').value.trim();
+
+      const params = {};
+      if (organisationId) params.organisationId = Number(organisationId);
+      if (organisationAlias) params.organisationAlias = organisationAlias;
+      if (dateFrom) params.dateFrom = dateFrom;
+      if (dateTo) params.dateTo = dateTo;
+
+      // Минимум: нужен либо ID, либо alias
+      if (!params.organisationId && !params.organisationAlias) {
+        alert('Укажите organisationId или organisationAlias');
+        return;
+      }
+
+      const res = await callProxy({
+        path: 'event/list',
+        params,
+        method: 'GET'
+      });
+
+      document.getElementById('afishaRaw').textContent = res.json ? JSON.stringify(res.json, null, 2) : res.text;
+
+      // Попробуем аккуратно составить краткое резюме
+      try {
+        const data = res.json || {};
+        const items = Array.isArray(data?.data) ? data.data : [];
+        const lines = [];
+        lines.push(`Всего событий: ${items.length}`);
+        items.slice(0, 10).forEach((it, idx) => {
+          const title = it?.title || it?.name || '—';
+          const when = it?.date || it?.startDate || it?.start || it?.sessionDate || '';
+          const place = it?.place?.name || it?.venue?.name || it?.organisation?.name || '';
+          lines.push(`${idx+1}. ${title}${when ? ' — ' + when : ''}${place ? ' @ ' + place : ''}`);
+        });
+        if (items.length > 10) lines.push(`… и ещё ${items.length - 10}`);
+        document.getElementById('afishaSummary').textContent = lines.join('\n');
+      } catch(e) {
+        document.getElementById('afishaSummary').textContent = 'Не удалось разобрать ответ.';
+      }
+    };
+  </script>
+</body>
+</html>
