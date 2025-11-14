@@ -39,9 +39,6 @@
         "audios"
       ]
     },
-    "dates": {
-      "type": "json"
-    },
     "creators": {
       "type": "richtext"
     },

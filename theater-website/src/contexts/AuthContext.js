@@ -1,3 +1,4 @@
+
 // Theater-website/src/contexts/AuthContext.js
 // Контекст для управления аутентификацией пользователей
 
@@ -181,4 +182,3 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

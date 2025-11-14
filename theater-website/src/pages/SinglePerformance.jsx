@@ -255,23 +255,6 @@ const SinglePerformance = () => {
                             </div>
                         )}
 
-                        {/* Отладочная информация (только в development) */}
-                        {process.env.NODE_ENV === 'development' && (
-                            <div style={{ 
-                                marginTop: '20px', 
-                                padding: '10px', 
-                                background: '#f0f0f0', 
-                                borderRadius: '4px',
-                                fontSize: '12px'
-                            }}>
-                                <strong>Отладка:</strong><br/>
-                                Proxy: {QT_PROXY ? '✓ Используется' : '—'}<br/>
-                                API Token: {process.env.REACT_APP_QUICKTICKETS_API_TOKEN ? '✓ Настроен' : '—'}<br/>
-                                API Salt: {process.env.REACT_APP_QUICKTICKETS_API_SALT ? '✓ Настроен' : '—'}<br/>
-                                Organisation ID: {QUICKTICKETS_ORGANISATION_ID || 'не указан (поиск по всем)'}<br/>
-                                Найдено сеансов: {sessions.length}
-                            </div>
-                        )}
 
                         {/* Галерея изображений */}
                         {performance.gallery.length > 0 && (

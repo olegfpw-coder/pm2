@@ -535,7 +535,6 @@ export interface ApiPerformancePerformance extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     creators: Schema.Attribute.RichText;
-    dates: Schema.Attribute.JSON;
     description: Schema.Attribute.RichText;
     gallery: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',

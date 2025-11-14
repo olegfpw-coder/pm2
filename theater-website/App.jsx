@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './components/Header';
 import Slider from './components/Slider';
-import UpcomingShows from './components/UpcomingShows';
+//import UpcomingShows from './components/UpcomingShows';
 import News from './components/News';
 import Footer from './components/Footer';
 import './styles.css';

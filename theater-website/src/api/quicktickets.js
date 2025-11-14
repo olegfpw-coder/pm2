@@ -372,30 +372,35 @@ export const fetchEvents = async (organisationId) => {
  * @param {string} performanceTitle - Название спектакля для поиска
  * @returns {Promise<Array>} Массив детализаций, отсортированных по дате
  */
+/**
+ * Найти детализации по названию спектакля
+ * @param {string|number|null} organisationId - ID или алиас организации (опционально, если null - ищет по всем)
+ * @param {string} performanceTitle - Название спектакля для поиска
+ * @returns {Promise<Array>} Массив детализаций, отсортированных по дате
+ */
 export const findSessionsByPerformanceTitle = async (organisationId, performanceTitle) => {
   try {
-    // Нормализация названий: убираем кавычки, точки, дефисы, лишние пробелы, приводим к нижнему регистру
     const normalizeTitle = (s) => {
       if (!s) return '';
       return String(s)
         .toLowerCase()
-        .replace(/[«»"“”„']/g, '')  // типографские и обычные кавычки
-        .replace(/[.]/g, '')        // точки
-        .replace(/\s*-\s*/g, ' ')   // дефисы между словами превращаем в пробел
-        .replace(/\s+/g, ' ')       // схлопываем пробелы
+        .replace(/[«»"“”„']/g, '')   // кавычки
+        .replace(/[.]/g, '')         // точки
+        .replace(/\s*-\s*/g, ' ')    // дефис между словами → пробел
+        .replace(/\(.*?\)/g, '')     // вырезать всё в круглых скобках
+        .replace(/\s+/g, ' ')        // схлопываем пробелы
         .trim();
     };
 
+    const search = normalizeTitle(performanceTitle);
+
+    // ---------- 1. Попытка через event/list (как раньше) ----------
     let events = [];
-    
+
     if (organisationId) {
-      // Если указан organisationId, ищем только в этой организации
       events = await fetchEvents(organisationId);
     } else {
-      // Если organisationId не указан, получаем список всех организаций и ищем по всем
       const organisations = await fetchOrganisations();
-      
-      // Ищем мероприятия во всех организациях
       for (const org of organisations) {
         try {
           const orgEvents = await fetchEvents(org.id);
@@ -405,45 +410,94 @@ export const findSessionsByPerformanceTitle = async (organisationId, performance
         }
       }
     }
-    
-    // Ищем мероприятие по названию (нечеткое совпадение, с нормализацией строк)
-    const normalizedSearch = normalizeTitle(performanceTitle);
-    const matchingEvent = events.find((event) => {
-      const eventName = normalizeTitle(event.name);
-      // Проверяем точное совпадение или вхождение в обе стороны
+
+    let matchingEvent = null;
+    if (events.length) {
+      matchingEvent = events.find((event) => {
+        const eventName = normalizeTitle(event.name);
+        return (
+          eventName === search ||
+          eventName.includes(search) ||
+          search.includes(eventName)
+        );
+      });
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+
+    if (matchingEvent) {
+      // Если нашли событие по имени — получаем его сеансы
+      let orgId = organisationId;
+      if (!orgId && matchingEvent.organisationId) {
+        orgId = matchingEvent.organisationId;
+      }
+
+      const sessions = await fetchSessions(orgId, matchingEvent.id);
+      const futureSessions = sessions
+        .filter((session) => session.timeStart > now)
+        .sort((a, b) => a.timeStart - b.timeStart);
+
+      if (futureSessions.length > 0) {
+        console.log(
+          '[QT findSessionsByPerformanceTitle] найдено через event.list:',
+          performanceTitle,
+          '→',
+          matchingEvent.name,
+          'сеансов:',
+          futureSessions.length
+        );
+        return futureSessions;
+      }
+    } else {
+      console.warn(
+        `[QT findSessionsByPerformanceTitle] не найдено совпадений в event.list для "${performanceTitle}" (search="${search}")`
+      );
+    }
+
+    // ---------- 2. Fallback: по session/list (фильтрация по названию события) ----------
+    // Здесь мы вообще не используем event/list, а идём сразу по сеансам
+
+    let orgIdForSessions = organisationId || null;
+    // если organisationId не передали — можно взять дефолтный из env, если у тебя он есть:
+    // if (!orgIdForSessions && process.env.REACT_APP_QUICKTICKETS_ORG_ID) {
+    //   orgIdForSessions = process.env.REACT_APP_QUICKTICKETS_ORG_ID;
+    // }
+
+    const allSessions = await fetchSessions(orgIdForSessions, null);
+
+    const matchedSessions = allSessions.filter((session) => {
+      const rawName =
+        session.eventName ||
+        session.event?.name ||
+        session.name ||
+        '';
+      const normName = normalizeTitle(rawName);
       return (
-        eventName === normalizedSearch ||
-        eventName.includes(normalizedSearch) ||
-        normalizedSearch.includes(eventName)
+        normName === search ||
+        normName.includes(search) ||
+        search.includes(normName)
       );
     });
 
-    if (!matchingEvent) {
-      console.warn(`Мероприятие "${performanceTitle}" не найдено в QuickTickets`);
-      return [];
-    }
-
-    // Определяем organisationId для получения сеансов
-    let orgId = organisationId;
-    if (!orgId && matchingEvent.organisationId) {
-      orgId = matchingEvent.organisationId;
-    }
-
-    // Получаем детализации для найденного мероприятия
-    const sessions = await fetchSessions(orgId, matchingEvent.id);
-    
-    // Фильтруем только будущие сеансы и сортируем по дате
-    const now = Math.floor(Date.now() / 1000); // Текущее время в Unix timestamp
-    const futureSessions = sessions
+    const futureMatched = matchedSessions
       .filter((session) => session.timeStart > now)
       .sort((a, b) => a.timeStart - b.timeStart);
 
-    return futureSessions;
+    console.log(
+      '[QT findSessionsByPerformanceTitle] fallback через session.list:',
+      performanceTitle,
+      'совпавших сеансов:',
+      futureMatched.length
+    );
+
+    return futureMatched;
   } catch (error) {
     console.error('Ошибка при поиске детализаций по названию:', error);
     return [];
   }
 };
+
+
 
 /**
  * Форматировать дату и время из Unix timestamp
