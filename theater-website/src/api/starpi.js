@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Базовый URL Strapi из .env (CRA: REACT_APP_STRAPI_URL)
+// Базовый URL Strapi
 export const BASE_URL = 'http://localhost:1337';
 
 // Общий axios клиент
@@ -30,16 +30,26 @@ const getMediaUrl = (mediaNode) => {
 
 const getSingleMedia = (imageField) => {
   if (!imageField) return null;
-  if (typeof imageField === 'string') return imageField.startsWith('http') ? imageField : `${BASE_URL}${imageField}`;
-  if (imageField.url) return imageField.url.startsWith('http') ? imageField.url : `${BASE_URL}${imageField.url}`;
+  if (typeof imageField === 'string') {
+    return imageField.startsWith('http') ? imageField : `${BASE_URL}${imageField}`;
+  }
+  if (imageField.url) {
+    return imageField.url.startsWith('http')
+      ? imageField.url
+      : `${BASE_URL}${imageField.url}`;
+  }
   if (imageField.data) return getMediaUrl(imageField.data);
   return null;
 };
 
 const getMultipleMedia = (galleryField) => {
   if (!galleryField) return [];
-  if (Array.isArray(galleryField)) return galleryField.map((g) => getSingleMedia(g)).filter(Boolean);
-  if (Array.isArray(galleryField.data)) return galleryField.data.map(getMediaUrl).filter(Boolean);
+  if (Array.isArray(galleryField)) {
+    return galleryField.map((g) => getSingleMedia(g)).filter(Boolean);
+  }
+  if (Array.isArray(galleryField.data)) {
+    return galleryField.data.map(getMediaUrl).filter(Boolean);
+  }
   return [];
 };
 
@@ -50,15 +60,12 @@ const unwrapEntry = (entry) => {
   return entry;
 };
 
-const unwrapCollection = (data) => Array.isArray(data) ? data.map(unwrapEntry) : [];
+const unwrapCollection = (data) => (Array.isArray(data) ? data.map(unwrapEntry) : []);
 
 // Slider
 export const fetchSliderData = async () => {
   try {
     const { data } = await apiClient.get('/api/sliders?populate=*');
-    // if (process.env.NODE_ENV !== 'production') {
-    //   console.log('RAW sliders response:', data);
-    // }
     return unwrapCollection(data.data)
       .map((item) => {
         let images = [];
@@ -89,9 +96,6 @@ export const fetchNewsData = async () => {
   try {
     // В схеме pluralName: "newsp" → эндпоинт: /api/newsp
     const { data } = await apiClient.get('/api/newsp?populate=*');
-    // if (process.env.NODE_ENV !== 'production') {
-    //   console.log('RAW newsp response:', data);
-    // }
     return unwrapCollection(data.data).map((item) => ({
       id: item.id,
       title: item.title || 'Без названия',
@@ -130,7 +134,9 @@ export const fetchNewsPage = async (page = 1, pageSize = 5) => {
 // Performances
 export const fetchPerformancesData = async () => {
   try {
-    const { data } = await apiClient.get('/api/performances?populate=*');
+    const { data } = await apiClient.get(
+      '/api/performances?populate=*&pagination[page]=1&pagination[pageSize]=100&sort[0]=createdAt:asc'
+    );
     return unwrapCollection(data.data).map((item) => ({
       id: item.id,
       title: item.title || 'Без названия',
@@ -150,7 +156,9 @@ export const fetchPerformancesData = async () => {
 // Artists
 export const fetchArtistsData = async () => {
   try {
-    const { data } = await apiClient.get('/api/artists?populate=*');
+    const { data } = await apiClient.get(
+      '/api/artists?populate=*&pagination[page]=1&pagination[pageSize]=100&sort[0]=createdAt:asc'
+    );
     return unwrapCollection(data.data).map((item) => ({
       id: item.id,
       name: item.name || 'Без имени',
@@ -168,7 +176,9 @@ export const fetchArtistsData = async () => {
 // Teams
 export const fetchTeamsData = async () => {
   try {
-    const { data } = await apiClient.get('/api/teams?populate=*');
+    const { data } = await apiClient.get(
+      '/api/teams?populate=*&pagination[page]=1&pagination[pageSize]=100&sort[0]=createdAt:asc'
+    );
     return unwrapCollection(data.data).map((item) => ({
       id: item.id,
       name: item.name || 'Без имени',
@@ -218,8 +228,6 @@ export const fetchAboutData = async () => {
 };
 
 // Универсальные статические страницы (например: услуги, контакты и т.п.)
-// Ожидаемый тип контента в Strapi: collection type "site-page" (plural: "site-pages")
-// Поля: title (Text), slug (UID), content (Rich Text)
 export const fetchStaticPage = async (slug) => {
   try {
     if (!slug) throw new Error('Не передан slug страницы');
@@ -250,7 +258,10 @@ export const fetchServiceData = async () => {
       const { data } = await apiClient.get(endpoint);
       const service = unwrapEntry(data.data);
       if (!service) continue;
-      const contentField = fieldCandidates.map((k) => service?.[k]).find((v) => typeof v === 'string' && v.trim().length > 0) || '';
+      const contentField =
+        fieldCandidates
+          .map((k) => service?.[k])
+          .find((v) => typeof v === 'string' && v.trim().length > 0) || '';
       return {
         id: service.id,
         title: service.title || 'Услуги',
@@ -274,7 +285,10 @@ export const fetchContactData = async () => {
       const { data } = await apiClient.get(endpoint);
       const contact = unwrapEntry(data.data);
       if (!contact) continue;
-      const contentField = fieldCandidates.map((k) => contact?.[k]).find((v) => typeof v === 'string' && v.trim().length > 0) || '';
+      const contentField =
+        fieldCandidates
+          .map((k) => contact?.[k])
+          .find((v) => typeof v === 'string' && v.trim().length > 0) || '';
       return {
         id: contact.id,
         title: contact.title || 'Контакты',
@@ -289,8 +303,6 @@ export const fetchContactData = async () => {
 };
 
 // Documents list (PDF и др. файлы)
-// Ожидаемый тип контента: collection type "document" (plural: "documents")
-// Поля: title (Text), file (Media, single), description (Text, optional), date (Date, optional)
 export const fetchDocumentsList = async () => {
   const endpoints = ['/api/docs?populate=*', '/api/documents?populate=*', '/api/doc?populate=*'];
   const titleFields = ['doc_name', 'title', 'name'];
@@ -300,7 +312,10 @@ export const fetchDocumentsList = async () => {
       try {
         const { data } = await apiClient.get(endpoint);
         const items = unwrapCollection(data.data).map((doc) => {
-          const title = titleFields.map((k) => doc?.[k]).find((v) => typeof v === 'string' && v.trim()) || 'Документ';
+          const title =
+            titleFields
+              .map((k) => doc?.[k])
+              .find((v) => typeof v === 'string' && v.trim()) || 'Документ';
           const fileNode = fileFields.map((k) => doc?.[k]).find((v) => v);
           const fileUrl = getSingleMedia(fileNode);
           return {
@@ -333,7 +348,10 @@ export const fetchTouringData = async () => {
       const { data } = await apiClient.get(endpoint);
       const touring = unwrapEntry(data.data);
       if (!touring) continue;
-      const contentField = fieldCandidates.map((k) => touring?.[k]).find((v) => typeof v === 'string' && v.trim().length > 0) || '';
+      const contentField =
+        fieldCandidates
+          .map((k) => touring?.[k])
+          .find((v) => typeof v === 'string' && v.trim().length > 0) || '';
       return {
         id: touring.id,
         title: touring.title || 'Гастролёрам',
