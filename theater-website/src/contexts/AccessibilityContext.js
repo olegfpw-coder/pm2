@@ -18,12 +18,12 @@ export const useAccessibility = () => {
 // Провайдер контекста
 export const AccessibilityProvider = ({ children }) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const [fontSize, setFontSize] = useState(100);
-  const [colorScheme, setColorScheme] = useState('normal');
+  const [fontSize, setFontSize] = useState(100);            // масштаб шрифта в %
+  const [colorScheme, setColorScheme] = useState('normal'); // normal | black-white | high-contrast
   const [showImages, setShowImages] = useState(true);
-  const [letterSpacing, setLetterSpacing] = useState('normal');
+  const [letterSpacing, setLetterSpacing] = useState('normal'); // normal | wide | tight
 
-  // Загружаем настройки
+  // Загружаем настройки из localStorage
   useEffect(() => {
     const savedSettings = localStorage.getItem('accessibilitySettings');
     if (savedSettings) {
@@ -54,9 +54,9 @@ export const AccessibilityProvider = ({ children }) => {
       document.head.appendChild(styleSheet);
     }
 
-    // Определяем значения
-    let bgColor = '#fff';
-    let textColor = '#000';
+    // Цветовые настройки
+    let bgColor = '';      // фон страницы/карточек
+    let textColor = '';    // основной цвет текста
     let imgBorder = '';
     let linkColor = '';
     let linkDecoration = '';
@@ -67,11 +67,15 @@ export const AccessibilityProvider = ({ children }) => {
         textColor = '#fff';
         break;
       case 'high-contrast':
+        bgColor = '#fff';
+        textColor = '#000';
         linkColor = '#0000EE';
         linkDecoration = 'underline';
         imgBorder = '2px solid #000';
         break;
+      case 'normal':
       default:
+        // нормальный режим — не трогаем глобальные цвета
         break;
     }
 
@@ -87,52 +91,105 @@ export const AccessibilityProvider = ({ children }) => {
         break;
     }
 
-    // Формируем CSS
     styleSheet.textContent = `
-      /* Основной класс для режима доступности */
-      .accessibility-mode {
+      /* Базовые параметры режима доступности на всём сайте */
+      body.accessibility-mode {
         font-size: ${fontSize}% !important;
         line-height: 1.6 !important;
-        background-color: ${bgColor} !important;
-        color: ${textColor} !important;
         font-family: Arial, Helvetica, sans-serif !important;
+        ${bgColor ? `background-color: ${bgColor} !important;` : ''}
+        ${textColor ? `color: ${textColor} !important;` : ''}
       }
 
-      /* Применяем кернинг */
-      .accessibility-mode * {
+      /* Основные структурные контейнеры */
+      body.accessibility-mode header,
+      body.accessibility-mode main,
+      body.accessibility-mode footer,
+      body.accessibility-mode nav {
+        ${bgColor ? `background-color: ${bgColor} !important;` : ''}
+        ${textColor ? `color: ${textColor} !important;` : ''}
+      }
+
+      /* КАРТОЧКИ и важные секции */
+
+      /* Общий случай: любые классы, где есть "card" */
+      body.accessibility-mode [class*="card"] {
+        ${bgColor ? `background-color: ${bgColor} !important;` : ''}
+        ${textColor ? `color: ${textColor} !important;` : ''}
+      }
+
+      /* Твои конкретные классы */
+      body.accessibility-mode .upcoming-shows,
+      body.accessibility-mode .show,
+      body.accessibility-mode .news-item,
+      body.accessibility-mode .session-item,
+      body.accessibility-mode .month-card,
+      body.accessibility-mode .performance-container,
+      body.accessibility-mode .performance-creators,
+      body.accessibility-mode .performance-cast,
+      body.accessibility-mode .art,
+      body.accessibility-mode .news,
+      body.accessibility-mode .date-item,
+      body.accessibility-mode .slide,
+      body.accessibility-mode .month-tab,
+      body.accessibility-mode .accessibility-mode,
+      body.accessibility-mode .favorites-grid,
+      body.accessibility-mode .profile-section {
+        ${bgColor ? `background-color: ${bgColor} !important;` : ''}
+        ${textColor ? `color: ${textColor} !important;` : ''}
+      }
+
+      /* ТЕКСТОВЫЕ ЭЛЕМЕНТЫ — размер шрифта, кернинг, цвет текста */
+      body.accessibility-mode p,
+      body.accessibility-mode li,
+      body.accessibility-mode a,
+      body.accessibility-mode span,
+      body.accessibility-mode label,
+      body.accessibility-mode input,
+      body.accessibility-mode textarea,
+      body.accessibility-mode select,
+      body.accessibility-mode h1,
+      body.accessibility-mode h2,
+      body.accessibility-mode h3,
+      body.accessibility-mode h4,
+      body.accessibility-mode h5,
+      body.accessibility-mode h6,
+      body.accessibility-mode td,
+      body.accessibility-mode th {
+        font-size: ${fontSize}% !important;
         letter-spacing: ${letterSpacingValue} !important;
-        background-image: none !important;
+        ${textColor ? `color: ${textColor} !important;` : ''}
+      }
+
+      /* Ссылки — подчёркивание/контраст в режимах high-contrast / black-white */
+      body.accessibility-mode a {
+        ${linkColor ? `color: ${linkColor} !important;` : ''}
+        ${linkDecoration ? `text-decoration: ${linkDecoration} !important;` : ''}
       }
 
       /* Управление изображениями */
-      .accessibility-mode img {
-        display: ${showImages ? 'block' : 'none'} !important;
+      body.accessibility-mode img {
+        display: ${showImages ? 'inline-block' : 'none'} !important;
         border: ${showImages && imgBorder ? imgBorder : 'none'} !important;
       }
 
-      /* Стили для ссылок */
-      .accessibility-mode a {
-        color: ${linkColor || 'inherit'} !important;
-        text-decoration: ${linkDecoration || 'inherit'} !important;
+      /* Видимый фокус (в чёрно-белой схеме — светлый контур) */
+      body.accessibility-mode *:focus {
+        outline: 3px solid ${bgColor === '#000' ? '#fff' : '#000'} !important;
+        outline-offset: 2px !important;
       }
 
-      /* Стили фокуса */
-      .accessibility-mode *:focus {
-        outline: 3px solid #000 !important;
-        outline-offset: 2px;
-      }
-
-      /* ИСПРАВЛЕНИЕ: Для особых случаев - белый текст на белом фоне */
-      /* Если элемент имеет белый фон и черный текст по умолчанию, 
-         но в режиме "нормальный" становится белым текстом на белом фоне */
-      .accessibility-mode .text-on-white-bg {
-        background-color: #000 !important;
-        color: #fff !important;
+      /* Класс-исключение, если что-то нельзя перекрашивать */
+      body.accessibility-mode .accessibility-exempt {
+        font-size: inherit !important;
+        letter-spacing: normal !important;
+        color: inherit !important;
+        background-color: inherit !important;
       }
     `;
 
+    // Обязательно навешиваем класс на body
     document.body.classList.add('accessibility-mode');
-
   }, [fontSize, colorScheme, showImages, letterSpacing]);
 
   // Функция сброса
@@ -168,7 +225,7 @@ export const AccessibilityProvider = ({ children }) => {
     letterSpacing,
     setLetterSpacing,
     resetSettings,
-    openPanelFromFooter
+    openPanelFromFooter,
   };
 
   return (
