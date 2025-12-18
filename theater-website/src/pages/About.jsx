@@ -1,80 +1,64 @@
-// src/pages/About.jsx
 import React, { useState, useEffect } from 'react';
-import Collage from '../components/TheatreCollage'; // Убедись, что путь правильный
-import { fetchAboutData } from '../api/starpi'; // Импортируем функцию
+import TheatreCollage from '../components/TheatreCollage';
+import { fetchAboutData } from '../api/starpi';
 import MarkdownRenderer from '../components/MarkdownRenderer';
-// Стили импортируются в main.css // Убедись, что путь к стилям правильный
 
 const About = () => {
-    const [textP1, setTextP1] = useState(''); // Для первого текста (строка)
-    const [textP2, setTextP2] = useState(''); // Для второго текста (строка)
-    const [loading, setLoading] = useState(true); // Состояние загрузки
-    const [error, setError] = useState(null); // Состояние ошибки
+  const [textP1, setTextP1] = useState('');
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                setLoading(true);
-                setError(null);
-                const data = await fetchAboutData(); // Получаем данные из Strapi
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-                // Устанавливаем текст как строку
-                // Если data.textP1 или data.textP2 - это объект Markdown, .toString() преобразует его в строку,
-                // хотя это может быть не совсем читаемый формат.
-                // Если это обычный текст, то просто установится как есть.
-                setTextP1(data.textP1?.toString() || '');
-                setTextP2(data.textP2?.toString() || '');
-            } catch (err) {
-                console.error('Ошибка загрузки данных:', err);
-                setError('Не удалось загрузить информацию о театре. Попробуйте позже.');
-            } finally {
-                setLoading(false); // Завершаем загрузку независимо от результата
-            }
-        };
+        const data = await fetchAboutData();
 
-        loadData();
-    }, []); // Пустой массив зависимостей - эффект выполняется один раз после монтирования
+        setTextP1((data?.TextP1 || '').toString());
+        setImages(Array.isArray(data?.images) ? data.images : []);
+      } catch (err) {
+        console.error('Ошибка загрузки данных About:', err);
+        setError('Не удалось загрузить информацию о театре. Попробуйте позже.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return (
-        <div className="about-page">
-            <main className="about-container">
-                {/* Отображение состояния загрузки */}
-                {loading && <p className="loading-text">Загрузка информации о театре...</p>}
+    loadData();
+  }, []);
 
-                {/* Отображение состояния ошибки */}
-                {error && <p className="error-text" style={{ color: 'red', textAlign: 'center', padding: '20px' }}>{error}</p>}
+  return (
+    <div className="about-page">
+      <main className="about-container">
+        {loading && <p className="loading-text">Загрузка информации о театре...</p>}
 
-                {/* Отображение контента, если нет ошибок и загрузка завершена */}
-                {!loading && !error && (
-                    <>
-                        {/* Отображаем RichText с Markdown-форматированием */}
-                        {textP1 && (
-                            <MarkdownRenderer 
-                                content={textP1} 
-                                className="about_p"
-                            />
-                        )}
+        {error && (
+          <p className="error-text" style={{ color: 'red', textAlign: 'center', padding: 20 }}>
+            {error}
+          </p>
+        )}
 
-                        <Collage /> {/* Компонент коллажа */}
+        {!loading && !error && (
+          <>
+            {textP1 && <MarkdownRenderer content={textP1} className="about_p" />}
 
-                        {textP2 && (
-                            <MarkdownRenderer 
-                                content={textP2} 
-                                className="about_p"
-                            />
-                        )}
-                    </>
-                )}
+            {images.length > 0 && (
+              <TheatreCollage images={images} title="История театра" />
+            )}
 
-                {/* Сообщение, если данных нет (не ошибка, просто пусто) */}
-                {!loading && !error && !textP1 && !textP2 && (
-                    <p className="no-content-text" style={{ textAlign: 'center', padding: '20px' }}>
-                        Информация о театре временно недоступна.
-                    </p>
-                )}
-            </main>
-        </div>
-    );
+            {!textP1 && images.length === 0 && (
+              <p className="no-content-text" style={{ textAlign: 'center', padding: 20 }}>
+                Информация о театре временно недоступна.
+              </p>
+            )}
+          </>
+        )}
+      </main>
+    </div>
+  );
 };
 
 export default About;

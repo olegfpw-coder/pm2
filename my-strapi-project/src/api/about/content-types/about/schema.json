@@ -1,5 +1,5 @@
 {
-  "kind": "collectionType",
+  "kind": "singleType",
   "collectionName": "abouts",
   "info": {
     "singularName": "about",
@@ -9,13 +9,21 @@
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
     "TextP1": {
       "type": "richtext",
       "required": true
     },
-    "textP2": {
-      "type": "richtext"
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

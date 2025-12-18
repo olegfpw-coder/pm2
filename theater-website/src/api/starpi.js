@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Базовый URL Strapi
-export const BASE_URL = 'http://localhost:1337';
+export const BASE_URL =
+  process.env.REACT_APP_STRAPI_URL || 'http://localhost:1337';
 
 // Общий axios клиент
 const apiClient = axios.create({
@@ -209,22 +210,38 @@ export const fetchRepertoireMonths = async () => {
 
 // About
 export const fetchAboutData = async () => {
-  try {
-    const { data } = await apiClient.get('/api/abouts?populate=*');
-    const items = unwrapCollection(data.data);
-    const first = items[0];
-    if (!first) {
-      console.warn('Запись "О театре" не найдена в Strapi');
-      return { textP1: null, textP2: null };
+  const endpoints = [
+    '/api/about?populate=images',     // если About = Single Type
+    '/api/abouts?populate=images',    // если About = Collection Type
+    '/api/abouts?populate=*',         // запасной вариант
+    '/api/about?populate=*',          // запасной вариант
+  ];
+
+  let lastError = null;
+
+  for (const endpoint of endpoints) {
+    try {
+      const { data } = await apiClient.get(endpoint);
+
+      // Single Type: data.data = { id, attributes }
+      // Collection Type: data.data = [ { id, attributes }, ... ]
+      const raw = data?.data;
+      const entry = Array.isArray(raw) ? unwrapEntry(raw[0]) : unwrapEntry(raw);
+
+      if (!entry) continue;
+
+      return {
+        TextP1: entry.TextP1 ?? '',
+        // images: Multiple Media
+        images: getMultipleMedia(entry.images),
+      };
+    } catch (error) {
+      lastError = error;
     }
-    return {
-      textP1: first.textP1 ?? null,
-      textP2: first.textP2 ?? null,
-    };
-  } catch (error) {
-    console.error('Ошибка при получении данных "О театре":', error);
-    throw error;
   }
+
+  console.error('Ошибка при получении данных "О театре":', lastError);
+  return { TextP1: '', images: [] };
 };
 
 // Универсальные статические страницы (например: услуги, контакты и т.п.)

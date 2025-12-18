@@ -1,107 +1,77 @@
 // Theater-website/src/App.js
-// Основной компонент приложения - точка входа
+// Основной компонент приложения - точка входа (с ленивой загрузкой страниц)
 
-import React from 'react';
-// Импортируем необходимые компоненты из react-router-dom для маршрутизации
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Импортируем наш созданный провайдер контекста и компонент панели
-import { AccessibilityProvider } from './contexts/AccessibilityContext'; // Провайдер для управления доступностью
-import { AuthProvider } from './contexts/AuthContext'; // Провайдер для аутентификации
-import AccessibilityPanel from './components/AccessibilityPanel'; // Панель настроек
-
-// Импортируем Layout компонент
+import { AccessibilityProvider } from './contexts/AccessibilityContext';
+import { AuthProvider } from './contexts/AuthContext';
+import AccessibilityPanel from './components/AccessibilityPanel';
 import Layout from './components/Layout';
-
-// Импортируем существующие страницы сайта
-import Home from './pages/Home'; // Главная страница
-import About from './pages/About'; // Страница "О театре"
-import Afisha from './pages/Afisha'; // Страница "Афиша"
-import Show from './pages/Show'; // Страница "Спектакли"
-import Artis from './pages/Artist'; // Страница "Артисты"
-import Team from './pages/Team'; // Страница "Команда"
-import News from './pages/News'; // Страница "Новости"
-import SingleNews from './pages/SingleNews'; // Страница отдельной новости
-import SinglePerformance from './pages/SinglePerformance'; // Страница отдельного спектакля
-import SingleArtist from './pages/SingleArtist'; // Страница одного артиста
-import SingleTeam from './pages/SingleTeam'; // Страница одного участника команды
-import NotFound from './pages/NotFound'; // Страница ошибки 404
-import Services from './pages/Services';
-import Contacts from './pages/Contacts';
-import Touring from './pages/Touring';
-import Documents from './pages/Documents';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Reviews from './pages/Reviews';
-
-// Импортируем глобальные стили сайта
+// Глобальные стили
 import './styles/main.css';
 
-// Основной компонент приложения
+// Ленивые импорты страниц (code-splitting)
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Afisha = lazy(() => import('./pages/Afisha'));
+const Show = lazy(() => import('./pages/Show'));
+const Artis = lazy(() => import('./pages/Artist'));
+const Team = lazy(() => import('./pages/Team'));
+const News = lazy(() => import('./pages/News'));
+const SingleNews = lazy(() => import('./pages/SingleNews'));
+const SinglePerformance = lazy(() => import('./pages/SinglePerformance'));
+const SingleArtist = lazy(() => import('./pages/SingleArtist'));
+const SingleTeam = lazy(() => import('./pages/SingleTeam'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Services = lazy(() => import('./pages/Services'));
+const Contacts = lazy(() => import('./pages/Contacts'));
+const Touring = lazy(() => import('./pages/Touring'));
+const Documents = lazy(() => import('./pages/Documents'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Reviews = lazy(() => import('./pages/Reviews'));
+
 function App() {
   return (
-    // Оборачиваем всё приложение в провайдеры контекста
     <AccessibilityProvider>
       <AuthProvider>
-        {/* Размещаем панель настроек доступности */}
-        {/* Она будет появляться справа при клике на кнопку в футере */}
         <AccessibilityPanel />
-
-        {/* Роутер для навигации между страницами */}
         <Router>
-        <Layout>
-          <Routes>
-            {/* Главная страница */}
-            <Route path="/" element={<Home />} />
-
-            {/* Страница "О театре" */}
-            <Route path="/about" element={<About />} />
-
-            {/* Страница "Афиша" */}
-            <Route path="/afisha" element={<Afisha />} />
-
-            {/* Страница "Спектакли" */}
-            <Route path="/show" element={<Show />} />
-
-            {/* Страница "Артисты" */}
-            <Route path="/artist" element={<Artis />} />
-
-            {/* Страница "Команда" */}
-            <Route path="/team" element={<Team />} />
-
-            {/* Страница "Новости" */}
-            <Route path="/news" element={<News />} />
-
-            {/* Страница отдельной новости */}
-            <Route path="/news/:id" element={<SingleNews />} />
-
-            {/* Страница отдельного спектакля */}
-            <Route path="/performances/:id" element={<SinglePerformance />} />
-
-            {/* Страница одного артиста */}
-            <Route path="/artists/:id" element={<SingleArtist />} />
-
-            {/* Страница одного участника команды */}
-            <Route path="/teams/:id" element={<SingleTeam />} />
-
-            {/* Статические страницы */}
-            <Route path="/services" element={<Services />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/touring" element={<Touring />} />
-            <Route path="/documents" element={<Documents />} />
-
-            {/* Страницы пользователя */}
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/performances/:id/reviews" element={<Reviews />} />
-
-            {/* Обработка ошибок 404 - страница не найдена */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </Router>
+          <Layout>
+            <Suspense
+              fallback={
+                <div className="page-loader" style={{ padding: '24px', textAlign: 'center' }}>
+                  Загрузка...
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/afisha" element={<Afisha />} />
+                <Route path="/show" element={<Show />} />
+                <Route path="/artist" element={<Artis />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/news/:id" element={<SingleNews />} />
+                <Route path="/performances/:id" element={<SinglePerformance />} />
+                <Route path="/artists/:id" element={<SingleArtist />} />
+                <Route path="/teams/:id" element={<SingleTeam />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/contacts" element={<Contacts />} />
+                <Route path="/touring" element={<Touring />} />
+                <Route path="/documents" element={<Documents />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/performances/:id/reviews" element={<Reviews />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Layout>
+        </Router>
       </AuthProvider>
     </AccessibilityProvider>
   );
