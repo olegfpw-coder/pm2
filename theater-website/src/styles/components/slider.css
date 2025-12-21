@@ -68,6 +68,11 @@
     right: 20px;
 }
 
+.slider-arrow.next:hover {
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 /* Индикаторы (точки) */
 .slider-dots {
     position: absolute;

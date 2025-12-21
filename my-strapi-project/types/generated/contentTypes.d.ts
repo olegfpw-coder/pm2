@@ -459,6 +459,34 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiAfishaimgAfishaimg extends Struct.SingleTypeSchema {
+  collectionName: 'afishaimgs';
+  info: {
+    displayName: 'Afishaimg';
+    pluralName: 'afishaimgs';
+    singularName: 'afishaimg';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    img: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::afishaimg.afishaimg'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiArtistArtist extends Struct.CollectionTypeSchema {
   collectionName: 'artists';
   info: {
@@ -1335,6 +1363,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::about.about': ApiAboutAbout;
+      'api::afishaimg.afishaimg': ApiAfishaimgAfishaimg;
       'api::artist.artist': ApiArtistArtist;
       'api::contact.contact': ApiContactContact;
       'api::doc.doc': ApiDocDoc;

@@ -12,12 +12,22 @@
 .hero-banner {
     position: relative;
     height: 400px;
-    background: url('../../img/theatr_photos/001.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: white;
+    overflow: hidden;
+}
+
+.hero-banner-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
 .hero-banner::before {
@@ -28,6 +38,7 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
 }
 
 .hero-content {
@@ -38,9 +49,11 @@
 }
 
 .hero-content h2 {
-    font-size: var(--font-size-4xl);
+    font-size: 3.5rem;
     margin-bottom: var(--spacing-xl);
+    color: white;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-weight: 600;
 }
 
 /* Карточки месяцев репертуара */
@@ -96,8 +109,9 @@
     }
 
     .hero-content h2 {
-        font-size: var(--font-size-2xl);
+        font-size: 10px;
         margin-bottom: var(--spacing-lg);
+        color: white;
     }
 
     /* Адаптация repertoire-months */

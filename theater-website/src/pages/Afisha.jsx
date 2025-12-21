@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 // Стили импортируются в main.css
-import { fetchRepertoireMonths } from '../api/starpi'; // Импортируем функцию для получения данных
+import { fetchRepertoireMonths, fetchAfishaImg } from '../api/starpi'; // Импортируем функцию для получения данных
 import AfishaByMonth from '../components/AfishaByMonth';
 
 const Afisha = () => {
     const [months, setMonths] = useState([]);
+    const [heroImage, setHeroImage] = useState(null);
 
     useEffect(() => {
         const loadRepertoireData = async () => {
@@ -19,6 +20,20 @@ const Afisha = () => {
         loadRepertoireData();
     }, []);
 
+    useEffect(() => {
+        const loadAfishaImg = async () => {
+            try {
+                const afishaimgData = await fetchAfishaImg();
+                if (afishaimgData && afishaimgData.imageUrl) {
+                    setHeroImage(afishaimgData.imageUrl);
+                }
+            } catch (error) {
+                console.error('Не удалось загрузить изображение для hero-banner:', error);
+            }
+        };
+        loadAfishaImg();
+    }, []);
+
     // Функция для открытия изображения в новой вкладке
     const openImageInNewTab = (imageUrl) => {
         console.log('Путь к изображению:', imageUrl); // Логируем путь к изображению
@@ -30,6 +45,13 @@ const Afisha = () => {
 
 
             <div className="hero-banner">
+                {heroImage && (
+                    <img 
+                        src={heroImage} 
+                        alt="Афиша" 
+                        className="hero-banner-image"
+                    />
+                )}
                 <div className="hero-content">
                     <h2>Приобретите билеты на репертуар на сайте QuickTickets</h2>
                     <a 

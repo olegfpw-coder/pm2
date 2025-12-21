@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "afishaimgs",
+  "info": {
+    "singularName": "afishaimg",
+    "pluralName": "afishaimgs",
+    "displayName": "Afishaimg"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "img": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

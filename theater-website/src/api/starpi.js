@@ -381,3 +381,46 @@ export const fetchTouringData = async () => {
   console.error('Ошибка при получении данных Touring:', lastError);
   return null;
 };
+
+// SingleType для Afishaimg (картинка для hero-banner на странице Афиши)
+export const fetchAfishaImg = async () => {
+  const endpoints = ['/api/afishaimg?populate=*', '/api/afishaimgs?populate=*'];
+  const imageFields = ['image', 'img', 'photo', 'picture', 'banner'];
+  let lastError = null;
+  for (const endpoint of endpoints) {
+    try {
+      const { data } = await apiClient.get(endpoint);
+      console.log('Afishaimg raw data:', data);
+      const afishaimg = unwrapEntry(data.data);
+      console.log('Afishaimg unwrapped:', afishaimg);
+      if (!afishaimg) continue;
+      
+      // Ищем поле с изображением
+      const imageField = imageFields.map((k) => afishaimg?.[k]).find((v) => v);
+      console.log('Image field found:', imageField);
+      const imageUrl = getSingleMedia(imageField);
+      console.log('Image URL from getSingleMedia:', imageUrl);
+      
+      if (imageUrl) {
+        // Очищаем URL от возможных экранированных символов
+        let cleanUrl = String(imageUrl);
+        cleanUrl = cleanUrl.replace(/&quot;/g, '');
+        cleanUrl = cleanUrl.replace(/&#39;/g, '');
+        cleanUrl = cleanUrl.replace(/"/g, '');
+        cleanUrl = cleanUrl.replace(/'/g, '');
+        cleanUrl = cleanUrl.trim();
+        console.log('Cleaned URL:', cleanUrl);
+        
+        return {
+          id: afishaimg.id,
+          imageUrl: cleanUrl,
+        };
+      }
+    } catch (error) {
+      console.error(`Ошибка при запросе к ${endpoint}:`, error);
+      lastError = error;
+    }
+  }
+  console.error('Ошибка при получении данных Afishaimg:', lastError);
+  return null;
+};
