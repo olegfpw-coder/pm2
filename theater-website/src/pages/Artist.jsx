@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchArtistsData } from '../api/starpi'; // Импортируем функцию для получения данных
-// Стили импортируются в main.css
 
 const Artists = () => {
     const [artists, setArtists] = useState([]); // Состояние для хранения артистов
@@ -23,7 +22,6 @@ const Artists = () => {
         };
         loadArtistsData();
     }, []);
-
     return (
         <div className="artists-page">
             <main className="artists-container">

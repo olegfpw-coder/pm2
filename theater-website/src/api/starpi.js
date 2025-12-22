@@ -4,6 +4,16 @@ import axios from 'axios';
 export const BASE_URL =
   process.env.REACT_APP_STRAPI_URL || 'http://localhost:1337';
 
+// === FIX START: нормализация base и удаление двойных слэшей ===
+const BASE_URL_CLEAN = String(BASE_URL).replace(/\/+$/, ''); // убираем хвостовые "/" у базы
+
+// убираем повторяющиеся "/" в пути, не ломая "http://"
+const normalizeUrl = (u) => {
+  if (!u) return u;
+  return String(u).trim().replace(/([^:]\/)\/+/g, '$1');
+};
+// === FIX END ===
+
 // Общий axios клиент
 const apiClient = axios.create({
   baseURL: BASE_URL,
@@ -13,8 +23,15 @@ const apiClient = axios.create({
 // Вспомогательные функции для распаковки ответов Strapi v4/v5
 const getMediaUrl = (mediaNode) => {
   if (!mediaNode) return undefined;
+
   const attrs = mediaNode.attributes || mediaNode;
   let url = attrs.url;
+
+  console.log('BASE_URL:', BASE_URL);
+  console.log('BASE_URL_CLEAN:', BASE_URL_CLEAN);
+  console.log('raw attrs.url:', attrs?.url);
+  console.log('raw formats:', attrs?.formats);
+
   if (!url && attrs.formats) {
     const preferredOrder = ['large', 'medium', 'small', 'thumbnail'];
     for (const key of preferredOrder) {
@@ -25,21 +42,38 @@ const getMediaUrl = (mediaNode) => {
       }
     }
   }
+
   if (!url) return undefined;
-  return String(url).startsWith('http') ? url : `${BASE_URL}${url}`;
+
+  // FIX: используем BASE_URL_CLEAN и нормализуем слэши
+  const full = String(url).startsWith('http') ? url : `${BASE_URL_CLEAN}${url}`;
+  return normalizeUrl(full);
 };
 
 const getSingleMedia = (imageField) => {
   if (!imageField) return null;
+
+  // Строкой (иногда приходит уже "/uploads/..." или "http(s)://...")
   if (typeof imageField === 'string') {
-    return imageField.startsWith('http') ? imageField : `${BASE_URL}${imageField}`;
+    // FIX: используем BASE_URL_CLEAN и нормализуем слэши
+    const full = imageField.startsWith('http')
+      ? imageField
+      : `${BASE_URL_CLEAN}${imageField}`;
+    return normalizeUrl(full);
   }
+
+  // Если объект вида { url: "/uploads/..." }
   if (imageField.url) {
-    return imageField.url.startsWith('http')
+    // FIX: используем BASE_URL_CLEAN и нормализуем слэши
+    const full = imageField.url.startsWith('http')
       ? imageField.url
-      : `${BASE_URL}${imageField.url}`;
+      : `${BASE_URL_CLEAN}${imageField.url}`;
+    return normalizeUrl(full);
   }
+
+  // Если Strapi вернул стандартный формат { data: { ... } }
   if (imageField.data) return getMediaUrl(imageField.data);
+
   return null;
 };
 
@@ -157,10 +191,14 @@ export const fetchPerformancesData = async () => {
 // Artists
 export const fetchArtistsData = async () => {
   try {
+
+    
     const { data } = await apiClient.get(
       '/api/artists?populate=*&pagination[page]=1&pagination[pageSize]=100&sort[0]=createdAt:asc'
     );
-    return unwrapCollection(data.data).map((item) => ({
+
+    const mapped = unwrapCollection(data.data).map((item) => ({
+      
       id: item.id,
       name: item.name || 'Без имени',
       title: item.title || 'Звание не указано',
@@ -168,6 +206,11 @@ export const fetchArtistsData = async () => {
       bio: item.bio || 'Информация недоступна',
       gallery: getMultipleMedia(item.gallery),
     }));
+
+    // Быстрый контроль: увидишь реальный итоговый URL в консоли (если включены error-level)
+    console.error('ARTISTS sample photo:', mapped?.[0]?.photo);
+
+    return mapped;
   } catch (error) {
     console.error('Ошибка при получении данных артистов:', error);
     throw error;
@@ -387,6 +430,7 @@ export const fetchAfishaImg = async () => {
   const endpoints = ['/api/afishaimg?populate=*', '/api/afishaimgs?populate=*'];
   const imageFields = ['image', 'img', 'photo', 'picture', 'banner'];
   let lastError = null;
+
   for (const endpoint of endpoints) {
     try {
       const { data } = await apiClient.get(endpoint);
@@ -394,13 +438,14 @@ export const fetchAfishaImg = async () => {
       const afishaimg = unwrapEntry(data.data);
       console.log('Afishaimg unwrapped:', afishaimg);
       if (!afishaimg) continue;
-      
+
       // Ищем поле с изображением
       const imageField = imageFields.map((k) => afishaimg?.[k]).find((v) => v);
       console.log('Image field found:', imageField);
+
       const imageUrl = getSingleMedia(imageField);
       console.log('Image URL from getSingleMedia:', imageUrl);
-      
+
       if (imageUrl) {
         // Очищаем URL от возможных экранированных символов
         let cleanUrl = String(imageUrl);
@@ -409,8 +454,12 @@ export const fetchAfishaImg = async () => {
         cleanUrl = cleanUrl.replace(/"/g, '');
         cleanUrl = cleanUrl.replace(/'/g, '');
         cleanUrl = cleanUrl.trim();
+
+        // FIX: нормализуем после чистки
+        cleanUrl = normalizeUrl(cleanUrl);
+
         console.log('Cleaned URL:', cleanUrl);
-        
+
         return {
           id: afishaimg.id,
           imageUrl: cleanUrl,
@@ -421,6 +470,7 @@ export const fetchAfishaImg = async () => {
       lastError = error;
     }
   }
+
   console.error('Ошибка при получении данных Afishaimg:', lastError);
   return null;
 };

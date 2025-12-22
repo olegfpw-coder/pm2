@@ -56,7 +56,7 @@ const SingleArtist = () => {
                 {artist && (
                     <div>
                         <h2>{artist.name}</h2>
-                        <p><strong>Звание:</strong> {artist.title}</p>
+                        <p><strong>Звание/Должность:</strong> {artist.title}</p>
                         <img src={artist.photo} alt={`Фото ${artist.name}`} className="artist-photo" />
                         <MarkdownRenderer 
                             content={artist.bio} 

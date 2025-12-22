@@ -53,7 +53,7 @@ const Afisha = () => {
                     />
                 )}
                 <div className="hero-content">
-                    <h2>Приобретите билеты на репертуар на сайте QuickTickets</h2>
+                    <h2>Приобретайте билеты на репертуар на сайте QuickTickets</h2>
                     <a 
                         href="https://quicktickets.ru" 
                         target="_blank" 
